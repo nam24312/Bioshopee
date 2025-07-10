@@ -2,34 +2,47 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Shopee Preview</title>
+  <title>Ủng hộ trước khi vào nội dung</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    .box {
+      display: inline-block;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+  <script>
+    function startRedirect() {
+      // Mở link Shopee ở tab mới
+      window.open("https://s.shopee.vn/20kMhCMATB", "_blank");
+
+      // Đếm ngược rồi chuyển hướng
+      let countdown = 5;
+      const counter = document.getElementById("countdown");
+      const interval = setInterval(() => {
+        countdown--;
+        counter.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(interval);
+          window.location.href = "https://www.youtube.com/results?search_query=privilege+walk";
+        }
+      }, 1000);
+    }
+
+    window.onload = startRedirect;
+  </script>
 </head>
 <body>
-  <h2>Xem trước sản phẩm Shopee</h2>
-  <input type="text" id="input" placeholder="Dán link Shopee..." style="width:300px">
-  <button onclick="getShopee()">Lấy thông tin</button>
-
-  <div id="result" style="margin-top:20px;"></div>
-
-  <script>
-    async function getShopee() {
-      const url = document.getElementById('input').value.trim();
-      if (!url.startsWith("http")) return alert("Link không hợp lệ!");
-
-      const encoded = encodeURIComponent(url);
-      const res = await fetch(`/api/shopee?url=${encoded}`);
-      const data = await res.json();
-
-      if (data.error) {
-        document.getElementById('result').innerText = "❌ Không lấy được dữ g liệu!";
-        return
-      }
-
-      document.getElementById('result').innerHTML = `
-        <img src="${data.image}" width="150"><br>
-        <h3>${data.title}</h3>
-      `;
-    }
-  </script>
+  <div class="box">
+    <h2>Đang mở Shopee...</h2>
+    <p>Cảm ơn bạn đã ủng hộ! Trang nội dung sẽ mở sau <span id="countdown">5</span> giây.</p>
+    <p>Nếu không được chuyển tiếp, nhấn <a href="https://www.youtube.com/results?search_query=privilege+walk">vào đây</a>.</p>
+  </div>
 </body>
 </html>
