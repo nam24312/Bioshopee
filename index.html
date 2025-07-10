@@ -42,7 +42,7 @@
 <body>
 
   <div class="recaptcha-fake" onclick="goShopee()">
-    <input type="checkbox" disabled>
+    <input type="checkbox" id="checkbox">
     <div class="recaptcha-text">Tôi không phải người máy</div>
     <div>
       <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" width="24" alt="reCAPTCHA">
@@ -52,7 +52,13 @@
 
   <script>
     function goShopee() {
-      window.open("https://s.shopee.vn/20kMhCMATB", "_blank");
+      // Đánh dấu vào ô checkbox
+      document.getElementById("checkbox").checked = true;
+
+      // Đợi khoảng 500ms rồi chuyển sang trang mới (hiệu ứng giống thật hơn)
+      setTimeout(() => {
+        window.location.href = "https://s.shopee.vn/20kMhCMATB";
+      }, 500);
     }
   </script>
 
