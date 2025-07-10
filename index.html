@@ -3,37 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>Preview Shopee</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: 50px auto;
+      text-align: center;
+    }
+    img {
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Preview Sản phẩm Shopee</h2>
-  <input type="text" id="input" placeholder="Dán link Shopee...">
+  <h2>🔍 Preview Sản phẩm Shopee</h2>
+  <input type="text" id="input" placeholder="Dán link Shopee..." style="width: 80%;">
+  <br><br>
   <button onclick="getShopee()">Lấy dữ liệu</button>
 
   <div id="result" style="margin-top:20px;"></div>
 
   <script>
-    function extractShopeeIds(url) {
-      const match = url.match(/product\/(\d+)\/(\d+)/);
-      return match ? { shopid: match[1], itemid: match[2] } : null;
-    }
-
     async function getShopee() {
-      const url = document.getElementById('input').value;
-      const ids = extractShopeeIds(url);
-      if (!ids) return alert("Link không hợp lệ!");
+      const url = document.getElementById('input').value.trim();
+      if (!url.startsWith('http')) {
+        alert("Vui lòng dán link đầy đủ, bắt đầu bằng http hoặc https");
+        return;
+      }
 
-      const res = await fetch(`/api/shopee?itemid=${ids.itemid}&shopid=${ids.shopid}`);
+      const res = await fetch(`/api/shopee?url=${encodeURIComponent(url)}`);
       const data = await res.json();
 
       if (data.error) {
-        document.getElementById('result').innerText = "Không lấy được dữ liệu!";
+        document.getElementById('result').innerText = "❌ Không lấy được dữ liệu!\n" + data.error;
         return;
       }
 
       document.getElementById('result').innerHTML = `
         <img src="${data.image}" width="150">
         <h3>${data.name}</h3>
-        <p>Giá: ${data.price}K</p>
+        <p><strong>Giá:</strong> ${data.price}K</p>
       `;
     }
   </script>
