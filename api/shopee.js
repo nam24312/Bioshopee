@@ -1,35 +1,26 @@
 export default async function handler(req, res) {
-  let inputUrl = req.query.url;
-  if (!inputUrl) return res.status(400).json({ error: "Thiếu URL" });
+  const { shopid, itemid } = req.query;
+
+  if (!shopid || !itemid)
+    return res.status(400).json({ error: "Thiếu shopid hoặc itemid" });
 
   try {
-    // Nếu là link rút gọn Shopee → mở rộng
-    if (inputUrl.includes("s.shopee.vn")) {
-      const r = await fetch(inputUrl, { method: "HEAD", redirect: "manual" });
-      const redirectUrl = r.headers.get("location");
-      if (!redirectUrl) return res.status(400).json({ error: "Link rút gọn không hợp lệ!" });
-      inputUrl = redirectUrl.startsWith("http") ? redirectUrl : `https://shopee.vn${redirectUrl}`;
-    }
-
-    // Fetch HTML của trang Shopee
-    const htmlRes = await fetch(inputUrl, {
+    const response = await fetch(`https://shopee.vn/api/v4/item/get?shopid=${shopid}&itemid=${itemid}`, {
       headers: {
-        "User-Agent": "Mozilla/5.0"
+        'User-Agent': 'Mozilla/5.0'
       }
     });
-    const html = await htmlRes.text();
 
-    // Lấy dữ liệu từ meta tag
-    const titleMatch = html.match(/<meta property="og:title" content="([^"]+)"/);
-    const imageMatch = html.match(/<meta property="og:image" content="([^"]+)"/);
+    const json = await response.json();
+    const item = json?.data?.item_basic;
 
-    if (!titleMatch || !imageMatch) {
-      return res.status(500).json({ error: "Không tìm thấy thông tin sản phẩm" });
-    }
+    if (!item)
+      return res.status(500).json({ error: "Không tìm thấy sản phẩm" });
 
     return res.json({
-      title: titleMatch[1],
-      image: imageMatch[1]
+      name: item.name,
+      price: item.price / 100000,
+      image: `https://cf.shopee.vn/file/${item.image}`
     });
 
   } catch (err) {
