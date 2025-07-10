@@ -1,26 +1,25 @@
 export default async function handler(req, res) {
   const { shopid, itemid } = req.query;
-
-  if (!shopid || !itemid)
+  if (!shopid || !itemid) {
     return res.status(400).json({ error: "Thiếu shopid hoặc itemid" });
+  }
 
   try {
     const response = await fetch(`https://shopee.vn/api/v4/item/get?shopid=${shopid}&itemid=${itemid}`, {
       headers: {
-        'User-Agent': 'Mozilla/5.0'
-      }
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Accept': 'application/json',
+      },
     });
 
     const json = await response.json();
     const item = json?.data?.item_basic;
-
-    if (!item)
-      return res.status(500).json({ error: "Không tìm thấy sản phẩm" });
+    if (!item) return res.status(500).json({ error: "Không tìm thấy sản phẩm" });
 
     return res.json({
       name: item.name,
       price: item.price / 100000,
-      image: `https://cf.shopee.vn/file/${item.image}`
+      image: `https://cf.shopee.vn/file/${item.image}`,
     });
 
   } catch (err) {
