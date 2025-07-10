@@ -1,74 +1,41 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BioShopee</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .card {
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-      padding: 10px;
-    }
-    .card img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .card h3 {
-      font-size: 16px;
-      margin: 10px 0 5px;
-    }
-    .card p {
-      font-size: 14px;
-      color: #555;
-    }
-    .card a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 6px 12px;
-      background: #ee4d2d;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Preview Shopee</title>
 </head>
 <body>
-  <h1>🌟 Sản phẩm nổi bật 🌟</h1>
-  <div class="grid">
-    <div class="card">
-      <img src="https://cf.shopee.vn/file/abc123" alt="Áo mèo" />
-      <h3>Áo Mèo Cute</h3>
-      <p>Áo in hình mèo cực xinh, giá chỉ 99K</p>
-      <a href="https://shopee.vn/abc">Mua ngay</a>
-    </div>
-    <div class="card">
-      <img src="https://cf.shopee.vn/file/xyz456" alt="Áo vai trễ" />
-      <h3>Áo Trễ Vai Nữ</h3>
-      <p>Phong cách nhẹ nhàng, dễ phối đồ</p>
-      <a href="https://shopee.vn/xyz">Mua ngay</a>
-    </div>
-    <!-- Thêm nhiều sản phẩm ở đây -->
-  </div>
+  <h2>Preview Sản phẩm Shopee</h2>
+  <input type="text" id="input" placeholder="Dán link Shopee...">
+  <button onclick="getShopee()">Lấy dữ liệu</button>
+
+  <div id="result" style="margin-top:20px;"></div>
+
+  <script>
+    function extractShopeeIds(url) {
+      const match = url.match(/product\/(\d+)\/(\d+)/);
+      return match ? { shopid: match[1], itemid: match[2] } : null;
+    }
+
+    async function getShopee() {
+      const url = document.getElementById('input').value;
+      const ids = extractShopeeIds(url);
+      if (!ids) return alert("Link không hợp lệ!");
+
+      const res = await fetch(`/api/shopee?itemid=${ids.itemid}&shopid=${ids.shopid}`);
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('result').innerText = "Không lấy được dữ liệu!";
+        return;
+      }
+
+      document.getElementById('result').innerHTML = `
+        <img src="${data.image}" width="150">
+        <h3>${data.name}</h3>
+        <p>Giá: ${data.price}K</p>
+      `;
+    }
+  </script>
 </body>
 </html>
