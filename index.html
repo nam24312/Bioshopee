@@ -4,61 +4,42 @@
   <meta charset="UTF-8">
   <title>Tôi không phải người máy</title>
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      margin-top: 100px;
-    }
+    body { font-family: sans-serif; text-align: center; margin-top: 100px; }
     .recaptcha-fake {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid #d3d3d3;
-      border-radius: 4px;
-      padding: 10px 15px;
-      cursor: pointer;
-      user-select: none;
-      box-shadow: 0 0 3px rgba(0,0,0,0.1);
-      background-color: #f9f9f9;
+      display: inline-flex; align-items: center;
+      border: 1px solid #d3d3d3; border-radius: 4px;
+      padding: 10px 15px; cursor: pointer;
+      background-color: #f9f9f9; box-shadow: 0 0 3px rgba(0,0,0,0.1);
     }
-    .recaptcha-fake:hover {
-      background-color: #f1f1f1;
-    }
-    .recaptcha-fake input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
-    .recaptcha-text {
-      font-size: 16px;
-      margin-right: 20px;
-    }
-    .recaptcha-logo {
-      font-size: 10px;
-      color: #888;
-      text-align: right;
-    }
+    .recaptcha-fake:hover { background-color: #f1f1f1; }
+    input[type="checkbox"] { width: 20px; height: 20px; margin-right: 10px; }
+    .recaptcha-text { font-size: 16px; margin-right: 20px; }
+    .recaptcha-logo { font-size: 10px; color: #888; text-align: right; }
   </style>
 </head>
 <body>
 
-  <div class="recaptcha-fake" onclick="goShopee()">
-    <input type="checkbox" id="checkbox">
+  <div class="recaptcha-fake" onclick="go()">
+    <input type="checkbox" id="cb">
     <div class="recaptcha-text">Tôi không phải người máy</div>
     <div>
-      <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" width="24" alt="reCAPTCHA">
+      <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" width="24">
       <div class="recaptcha-logo">reCAPTCHA</div>
     </div>
   </div>
 
   <script>
-    function goShopee() {
-      // Đánh dấu vào ô checkbox
-      document.getElementById("checkbox").checked = true;
+    function go() {
+      // Tick checkbox
+      document.getElementById("cb").checked = true;
 
-      // Đợi khoảng 500ms rồi chuyển sang trang mới (hiệu ứng giống thật hơn)
+      // Mở Shopee trong tab mới
+      window.open("https://s.shopee.vn/8UxqTHK46l", "_blank");
+
+      // Sau đó chuyển tab hiện tại đến trang đích
       setTimeout(() => {
-        window.location.href = "https://s.shopee.vn/20kMhCMATB";
-      }, 500);
+        window.location.href = "https://collshp.com/shopdodep123";
+      }, 500); // delay nhẹ để người dùng thấy hiệu ứng tick
     }
   </script>
 
